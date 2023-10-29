@@ -1,0 +1,98 @@
+/**
+ * Copyright © 2019 , 2020 , 2023  saphalpdyl
+ * This file is part of Form Attendance which is released under MIT license.
+ * See file LICENSE for full license details.
+ * 
+ */
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<base target="_top">
+	<meta charset="UTF-8">
+	<title>Slide Maker</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<?!= include('manager-css'); ?>
+</head>
+
+<body>
+	<center>
+        <div id="loader" hidden>
+            <div class="spinner-border text-success"></div>
+            <br>
+            <br>
+            <h3>Processing , Please wait a while ... </h3>
+            <br>
+            <br>  
+        </div>
+
+        <div id="main">
+            <h1>Slides Maker</h1>
+
+            <hr>
+
+            <label for="class" style="font-size: larger;"> For Class </label>
+            <select name="class" id="class_num">
+                <option value="" selected disabled hidden>Select Class</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+
+            <br>
+            <br>
+            <br>
+
+            <h2> Unit : </h2>
+            <div id="unit_type" class="alert alert-info">
+                <select name="opt_choose" id="opt_choose" selected="None">
+                    <option value="" selected disabled hidden>None Selected</option>
+                    <option value="new">New </option>
+                    <option value="existing">Existing </option>
+                </select>
+
+                <br>
+                <br>
+
+
+                <div id="content">
+                    <div id="cnFile" hidden>
+                        <center>
+                            <table cellpadding=0>
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <h3>File Name</h3>
+                                        <input type="text" id="file_name">
+                                    </td>
+                                    <td>
+                                        <h3 style="text-align: center;">Unit Number</h3>
+                                        <input type=" number" id="unit_number">
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </div>
+
+                    <div id="exFile" hidden>
+                        <div id="lessonList" class="alert alert-success">
+                          <div id="lessonListSpinner"> 
+                            <div class="spinner-border text-danger"></div>
+                            <h4> Retrieving Data ... </h4>
+                          </div>
+                        </div>
+                        <h3 style="text-align: center;">Selected Lesson</h3>
+                        <div class="alert alert-success" id="lesson_name"></div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-outline-success" id="submit">Submit</button>
+        </div>
+    </center>
+  <?!= include('manager-js'); ?>
+</body>
+
+</html>

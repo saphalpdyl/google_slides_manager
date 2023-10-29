@@ -1,0 +1,45 @@
+/**
+ * Copyright © 2019 , 2020 , 2023  saphalpdyl
+ * This file is part of Form Attendance which is released under MIT license.
+ * See file LICENSE for full license details.
+ * 
+ */
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <?!= include('settings-css') ?>
+</head>
+
+<body>
+    <center>
+      <div id="loader" hidden>
+            <div class="spinner-border text-success"></div>
+            <br>
+            <br>
+            <h3>Processing , Please wait a while ... </h3>
+            <br>
+            <br>  
+        </div>
+
+        <div id="main">
+          <hr>
+          <div class="alert alert-info" style="font-size: xx-large;" role="alert">Settings</div>
+
+          <hr>
+          <div id="content">
+
+          </div>
+          <button type="button" class="btn btn-outline-success" id="submit">Submit</button>
+        </div>
+        
+    </center>
+    <?!= include('settings-js') ?>
+</body>
+
+</html>

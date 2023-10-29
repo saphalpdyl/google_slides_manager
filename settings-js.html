@@ -1,0 +1,76 @@
+/**
+ * Copyright © 2019 , 2020 , 2023  saphalpdyl
+ * This file is part of Form Attendance which is released under MIT license.
+ * See file LICENSE for full license details.
+ * 
+ */
+
+<script> 
+    window.onload = function () {
+    let content = document.querySelector("#content");
+    let submit = document.querySelector("#submit");
+
+    let loader = document.querySelector('#loader');
+    let main = document.querySelector('#main');
+
+    //Switch between loader
+    function toggleHidden() {
+        main.hidden = !main.hidden;
+        loader.hidden = !loader.hidden;
+    }
+
+    // To list a setting
+    const appendSetting = (setting, value) => {
+        let settingName = document.createElement("span");
+        settingName.textContent = `${setting}`;
+        settingName.style = "font-size : 20px";
+        settingName.className = "input-group-text";
+
+        let inputArea = document.createElement("input");
+        inputArea.value = value;
+        inputArea.type = "text";
+        inputArea.className = "form-control";
+        inputArea.addEventListener('change' , () =>  {
+          outgoingData[setting] = inputArea.value;
+        })
+
+        let inputDiv = document.createElement("div");
+        inputDiv.className = "input-group mb-3 inputDivs";
+
+        inputDiv.appendChild(settingName);
+        inputDiv.appendChild(inputArea);
+        inputDiv.appendChild(document.createElement("br"));
+        inputDiv.appendChild(document.createElement("br"));
+
+        content.appendChild(inputDiv);
+    };
+
+
+    // Get the list of settings from the server
+    let incomingData;
+    let outgoingData;
+
+    toggleHidden();
+    google.script.run
+      .withSuccessHandler((ret) => {
+          toggleHidden();
+          incomingData = ret;
+          outgoingData = incomingData;
+          for (const key in incomingData) {
+              appendSetting(key, incomingData[key]);
+          }
+          
+          // When submit is clicked 
+          submit.addEventListener('click' , () => {
+            toggleHidden();
+            google.script.run
+              .withSuccessHandler(() => {google.script.host.close()})
+              .setProperties(outgoingData);
+          })
+        })
+      .getProperties();
+    
+
+};
+
+</script>

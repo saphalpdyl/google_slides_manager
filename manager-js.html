@@ -1,0 +1,170 @@
+/**
+ * Copyright © 2019 , 2020 , 2023  saphalpdyl
+ * This file is part of Form Attendance which is released under MIT license.
+ * See file LICENSE for full license details.
+ * 
+ */
+
+<script>
+    window.onload = () => {
+        let class_num = document.querySelector("#class_num");
+        let content = document.querySelector("#content");
+        let opt_choose = document.querySelector("#opt_choose");
+        let submit = document.querySelector("#submit");
+
+        let cnFileNode = document.querySelector("#cnFile");
+        let exFileNode = document.querySelector("#exFile");
+
+        opt_choose.addEventListener("change", () => {
+            if (opt_choose.value === "new") {
+                cnFileNode.hidden = false;
+                exFileNode.hidden = true;
+            } else if (opt_choose.value === "existing") {
+                exFileNode.hidden = false;
+                cnFileNode.hidden = true;
+            }
+        });
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------//
+        
+        
+        
+        
+        //If file doesn't exists
+        submit.addEventListener("click", () => {
+          toggleHidden();
+            if (class_num.value != "") {
+                //To create a new file
+                if (opt_choose.value == "new") {
+                  google.script.run
+                    .withSuccessHandler(function() {google.script.host.close()})
+                    .withFailureHandler(function(msg,element){window.alert("failed : " + msg); })
+                    .manageData(false , {
+                      'class' : class_num.value ,
+                      'file_name' : cnFileNode.querySelector('#file_name').value,
+                      'unit_number' : cnFileNode.querySelector("#unit_number").value,
+                    });
+                } 
+
+
+
+                
+//----------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------//
+                
+                
+                
+                
+                //If the file exists
+                else if (opt_choose.value == "existing") {
+                  google.script.run
+                    .withSuccessHandler(function() {google.script.host.close()})
+                    .withFailureHandler(function(msg,element){window.alert("failed : " + msg); })
+                    .manageData(true , {
+                      'class' : class_num.value ,
+                      'unit_number' : parseInt(exFileNode.querySelector("#lesson_name").textContent.split(" ")[0])
+                    });
+                }
+                
+                 else {
+                    window.alert("⚠⚠Unit Type Not Chosen⚠⚠");
+                    toggleHidden();
+
+                }
+            }
+            else {
+                  window.alert("⚠⚠Class Not Chosen⚠⚠");
+                  toggleHidden();
+
+            }
+        });
+
+        //Toggle between hiding and unhiding the loader and main element
+        function toggleHidden() {
+        main.hidden = !main.hidden;
+        loader.hidden = !loader.hidden;
+        }
+
+
+
+
+  //---------------------------------------------------------------------------------------------------------//
+  //---------------------------------------------------------------------------------------------------------//
+    
+    
+    
+    
+    
+    
+    // List Existing Lessons
+
+    let lessonData = {};
+    let lessonList = document.querySelector("#lessonList");
+    let selectedLesson = null;
+    let unit_num = exFileNode.querySelector('#lesson_name');
+
+    function changeLesson(lessonName) {
+      selectedLesson = lessonName;
+      unit_num.textContent = selectedLesson;
+    }
+
+class_num.addEventListener("change", () => {
+
+  changeLesson(null); // Clears the selection
+  
+   lessonList.querySelectorAll("button , span").forEach(e => e.remove());
+    if(Object.keys(lessonData).length === 0){
+      class_num.disabled = true;
+      google.script.run     // Calling for the Server-side getter function
+      .withSuccessHandler((ret) => {
+        class_num.disabled = false;
+        document.querySelector('#lessonListSpinner').hidden = true;
+        lessonData = ret;
+        processLessonData(lessonData , class_num , lessonList , changeLesson)
+      })
+      .getLessonData()
+    }
+    else {
+      processLessonData(lessonData , class_num , lessonList , changeLesson)
+    }
+    
+});
+
+
+
+
+//---------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------//
+
+
+
+
+
+//Create a list of buttons groups 
+const processLessonData = (lessonData , class_num , lessonList , changeLesson) => {
+  if(lessonData[class_num.value].length == 0){
+    let noDataSpan = document.createElement("span");
+    noDataSpan.textContent = "No Data";
+    lessonList.appendChild(noDataSpan);
+  }
+  lessonData[class_num.value].map((les) => {
+    let textSpan = document.createElement("button");
+    textSpan.textContent = les;
+    textSpan.className = "btn btn-outline-dark";
+    textSpan.style['width'] = '70%'
+    textSpan.style['margin-bottom'] = '7px'
+    textSpan.addEventListener('click' , () => {
+      changeLesson(textSpan.textContent);
+    })
+
+    lessonList.appendChild(textSpan);
+  });
+}
+};
+
+</script>
